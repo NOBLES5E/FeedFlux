@@ -104,6 +104,7 @@ func readRecordFile(url string, recordDirPath string) (*FeedProgress, error) {
 }
 
 func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, continueFetch bool, timeoutSeconds int) {
+    defer close(results)
 	fp := gofeed.NewParser()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
 	defer cancel()
@@ -170,6 +171,4 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 			log.Fatal(err)
 		}
 	}
-
-	close(results)
 }
