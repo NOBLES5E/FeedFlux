@@ -1,0 +1,85 @@
+build:
+  binary: ff
+  main: ./
+  goos:
+    - windows
+    - darwin
+    - linux
+    - freebsd
+  goarch:
+    - '386'
+    - amd64
+    - arm
+    - arm64
+  goarm:
+    - '6'
+  ignore:
+    - goos: darwin
+      goarch: '386'
+  env:
+    - CGO_ENABLED=0
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  flags:
+    - -trimpath
+  ldflags:
+    - -s -w # Don't set main.version.
+
+gomod:
+  proxy: true
+
+archives:
+  - name_template: "{{.Binary}}_{{.Os}}_{{.Arch}}"
+    files:
+      - README.md
+      - LICENSE
+      - completion/**/*
+    format_overrides:
+      - goos: windows
+        format: zip
+
+release:
+  draft: true
+
+snapshot:
+  name_template: "{{.Tag}}"
+
+checksum:
+  name_template: "ff_checksums.txt"
+
+nfpms:
+  - vendor: feedflux
+    homepage: https://github.com/NOBLES5E/FeedFlux
+    maintainer: Shawn Lian <shawn@shawnlian.com>
+    description: FeedFlux is a lightweight tool developed in Go that parses various feeds such as RSS and Atom into a unified JSON format, with the ability to record and resume fetching progress.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    file_name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
+    contents:
+      - src: completion/bash/ff.bash
+        dst: /etc/bash_completion.d/ff
+      - src: completion/fish/ff.fish
+        dst: /usr/share/fish/completions/ff.fish
+      - src: completion/zsh/_ff
+        dst: /usr/local/share/zsh/site-functions/_ff
+
+brews:
+  - name: feedflux
+    description: FeedFlux is a lightweight tool developed in Go that parses various feeds such as RSS and Atom into a unified JSON format, with the ability to record and resume fetching progress.
+    license: MIT
+    homepage: https://github.com/NOBLES5E/FeedFlux
+    folder: Formula
+    tap:
+      owner: go-feedflux
+      name: homebrew-tap
+    test:
+      system "#{bin}/ff", "--help"
+    install: |-
+      bin.install "feedflux"
+      bash_completion.install "completion/bash/ff.bash" => "ff"
+      zsh_completion.install "completion/zsh/_ff" => "_ff"
+      fish_completion.install "completion/fish/ff.fish"
+    commit_author:
+      name: ff-bot
+      email: 10413241+ff-bot@users.noreply.github.com
