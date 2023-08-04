@@ -102,6 +102,9 @@ func readRecordFile(url string, recordDirPath string) (*FeedProgress, error) {
 	if err := decoder.Decode(&record); err != nil {
 		return nil, err
 	}
+	if record.FetchedGuids == nil {
+		return nil, fmt.Errorf("fetchedGuids is nil")
+	}
 	return &record, nil
 }
 
