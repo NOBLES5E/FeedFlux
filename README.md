@@ -12,6 +12,22 @@ Upon setup of Go, you can download FeedFlux using the `go get` command:
 $ go get -u github.com/NOBLES5E/feedflux
 ```
 
+FeedFlux also provides an installation script which is particularly useful in scenarios like CI/CD pipelines. Many thanks to GoDownloader for enabling the easy generation of this script.
+
+By default, it installs in the `./bin` directory relative to the working directory:
+
+```sh
+sh -c "$(curl --location https://raw.githubusercontent.com/NOBLES5E/FeedFlux/main/install.sh)" -- -d
+```
+
+You can override the default installation directory using the `-b` parameter. On Linux, common choices are `~/.local/bin` and `~/bin` to install for the current user, or `/usr/local/bin` to install for all users:
+
+```sh
+sh -c "$(curl --location https://raw.githubusercontent.com/NOBLES5E/FeedFlux/main/install.sh)" -- -d -b ~/.local/bin 
+```
+
+This script makes the installation process easier, especially for automated processes such as continuous integration and continuous deployment.
+
 ## Usage
 
 To make use of FeedFlux, specify the feeds you wish to parse in the form of arguments. FeedFlux will fetch these feeds, convert them into a unified JSON format, and stream the output to stdout.
@@ -29,10 +45,10 @@ FeedFlux also includes the functionality to record your fetching progress. When 
 Example with recorded progress:
 
 ```sh
-$ feedflux -r progress.json https://example.com/rss
+$ feedflux -r ./progress/ https://example.com/rss
 ```
 
-In this case, FeedFlux will use a file `progress.json` to store the progress.
+In this case, FeedFlux will use the directory `./progress` to store the progress.
 
 ## Examples
 
@@ -48,14 +64,14 @@ $ feedflux https://example.com/rss https://example.com/atom
 To fetch feed(s) and record the progress in a JSON file for later resumption; use:
 
 ```sh
-$ feedflux -r progress.json https://example.com/rss
+$ feedflux -r ./progress https://example.com/rss
 ```
 ### Resume fetching:
 
 To continue fetching feed(s) from a previously recorded point, use:
 
 ```sh
-$ feedflux -r progress.json -c
+$ feedflux -r ./progress -c
 ```
 ## Contributing
 
