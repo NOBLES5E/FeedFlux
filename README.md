@@ -35,7 +35,7 @@ To make use of FeedFlux, specify the feeds you wish to parse in the form of argu
 Example:
 
 ```sh
-$ feedflux https://example.com/rss https://example.com/atom
+$ ff https://example.com/rss https://example.com/atom
 ```
 
 The example above fetches feeds from the specified URLs.
@@ -45,7 +45,7 @@ FeedFlux also includes the functionality to record your fetching progress. When 
 Example with recorded progress:
 
 ```sh
-$ feedflux -r ./progress/ https://example.com/rss
+$ ff -r ./progress/ https://example.com/rss
 ```
 
 In this case, FeedFlux will use the directory `./progress` to store the progress.
@@ -57,21 +57,21 @@ In this case, FeedFlux will use the directory `./progress` to store the progress
 To fetch feed(s) and print the formatted output to stdout; use:
 
 ```sh
-$ feedflux https://example.com/rss https://example.com/atom
+$ ff https://example.com/rss https://example.com/atom
 ```
 ### Record progress:
 
 To fetch feed(s) and record the progress in a JSON file for later resumption; use:
 
 ```sh
-$ feedflux -r ./progress https://example.com/rss
+$ ff -r ./progress https://example.com/rss
 ```
 ### Resume fetching:
 
 To continue fetching feed(s) from a previously recorded point, use:
 
 ```sh
-$ feedflux -r ./progress -c
+$ ff -r ./progress -c
 ```
 ## Contributing
 
