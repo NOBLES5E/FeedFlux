@@ -9,9 +9,7 @@ FeedFlux is a light and versatile tool developed in Go, designed to parse feeds 
 
 The built binaries can be downloaded on https://github.com/NOBLES5E/FeedFlux/releases. 
 
-FeedFlux also provides an installation script which is particularly useful in scenarios like CI/CD pipelines. Many thanks to GoDownloader for enabling the easy generation of this script.
-
-By default, it installs in the `./bin` directory relative to the working directory:
+FeedFlux also provides an installation script. By default, it installs in the `./bin` directory relative to the working directory:
 
 ```sh
 $ sh -c "$(curl --location https://raw.githubusercontent.com/NOBLES5E/FeedFlux/main/install.sh)" -- -d
@@ -22,8 +20,6 @@ You can override the default installation directory using the `-b` parameter. On
 ```sh
 $ sh -c "$(curl --location https://raw.githubusercontent.com/NOBLES5E/FeedFlux/main/install.sh)" -- -d -b ~/.local/bin 
 ```
-
-This script makes the installation process easier, especially for automated processes such as continuous integration and continuous deployment.
 
 ## Usage
 
