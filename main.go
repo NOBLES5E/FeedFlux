@@ -55,6 +55,9 @@ func main() {
 			}
 
 			urls := c.Args().Slice()
+			if len(urls) == 0 {
+				log.Fatal("no feed url specified")
+			}
 			results := make(chan *gofeed.Item)
 
 			for _, url := range urls {
