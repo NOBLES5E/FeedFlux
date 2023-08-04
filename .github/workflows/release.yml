@@ -7,14 +7,26 @@ permissions:
     packages: write
 
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
+  releases-matrix:
+    name: Release Go Binary
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ["386", amd64, arm64]
+        exclude:
+          - goarch: "386"
+            goos: darwin
+          - goarch: arm64
+            goos: windows
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: wangyoucao577/go-release-action@v1.38
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: linux
-        goarch: amd64
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: "latest"
+        project_path: "./cmd/FeedFlux"
         binary_name: "ff"
+        extra_files: LICENSE README.md
