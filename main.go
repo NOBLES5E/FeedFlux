@@ -21,7 +21,7 @@ func main() {
 	log.SetLevel(log.InfoLevel)
 	app := &cli.App{
 		Name:  "FeedFlux (ff)",
-		Usage: "parse feeds and print the contents into a unified JSON format",
+		Usage: "FeedFlux is a lightweight tool developed in Go that parses various feeds such as RSS and Atom into a unified JSON format, with the ability to record and resume fetching progress."
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{

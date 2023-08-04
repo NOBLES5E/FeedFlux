@@ -1,6 +1,6 @@
 # FeedFlux
 
-FeedFlux is a light and versatile tool developed in Go, designed to parse feeds such as RSS, Atom, and more. With FeedFlux, these feeds can be transformed into a unified JSON format and streamed directly to your stdout. Rather uniquely, this tool also offers the ability to record and resume your progress as needed.
+FeedFlux is a light and versatile tool developed in Go, designed to parse feeds such as RSS, Atom, and more. With FeedFlux, these feeds can be transformed into a unified JSON format and streamed directly to your stdout, one line per item. This tool also offers the ability to record and resume your progress as needed.
 
 ## Installation
 
