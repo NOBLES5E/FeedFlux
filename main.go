@@ -110,7 +110,7 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 	defer cancel()
 	feed, err := fp.ParseURLWithContext(url, ctx)
 	if err != nil {
-		log.Infof("error fetching %s: %s", url, err)
+		log.Errorf("error fetching %s: %s", url, err)
 		return
 	}
 	// FetchedUntil is the largest published timestamp of all items
