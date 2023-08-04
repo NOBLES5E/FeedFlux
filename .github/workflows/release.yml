@@ -1,0 +1,31 @@
+name: Release Go Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build and Release
+      uses: wangyoucao577/go-release-action@v1.38
+      with:
+        goos: 'linux,windows,darwin'
+        goarch: '386,amd64'
+        goversion: '1.16'
+        filename_template: 'ff-{{.Version}}-{{.Os}}-{{.Arch}}'
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
