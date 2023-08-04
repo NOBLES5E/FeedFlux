@@ -56,13 +56,6 @@ nfpms:
       - deb
       - rpm
     file_name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
-    contents:
-      - src: completion/bash/ff.bash
-        dst: /etc/bash_completion.d/ff
-      - src: completion/fish/ff.fish
-        dst: /usr/share/fish/completions/ff.fish
-      - src: completion/zsh/_ff
-        dst: /usr/local/share/zsh/site-functions/_ff
 
 brews:
   - name: feedflux
@@ -77,9 +70,6 @@ brews:
       system "#{bin}/ff", "--help"
     install: |-
       bin.install "feedflux"
-      bash_completion.install "completion/bash/ff.bash" => "ff"
-      zsh_completion.install "completion/zsh/_ff" => "_ff"
-      fish_completion.install "completion/fish/ff.fish"
     commit_author:
       name: ff-bot
       email: 10413241+ff-bot@users.noreply.github.com
