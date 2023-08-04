@@ -15,8 +15,8 @@ import (
 )
 
 type FeedProgress struct {
-	URL         string       `json:"url"`
-	FetchedUrls *hashset.Set `json:"fetchedUrls"`
+	URL          string       `json:"url"`
+	FetchedGuids *hashset.Set `json:"fetchedGuids"`
 }
 
 func main() {
@@ -117,8 +117,8 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 	}
 	// FetchedUntil is the largest published timestamp of all items
 	record := FeedProgress{
-		URL:         url,
-		FetchedUrls: hashset.New(),
+		URL:          url,
+		FetchedGuids: hashset.New(),
 	}
 	// record file path is sha256 of url
 	fileName := sha256.Sum256([]byte(url))
@@ -143,11 +143,11 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 
 	for _, item := range feed.Items {
 		// If continue fetching, skip items that are fetched before
-		if continueFetch && record.FetchedUrls.Contains(item.Link) {
+		if continueFetch && record.FetchedGuids.Contains(item.GUID) {
 			continue
 		}
 		results <- item
-		record.FetchedUrls.Add(item.Link)
+		record.FetchedGuids.Add(item.GUID)
 	}
 
 	if recordDirPath != "" {
