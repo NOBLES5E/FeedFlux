@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"github.com/emirpasic/gods/sets/hashset"
 	"github.com/mmcdole/gofeed"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
@@ -13,8 +15,8 @@ import (
 )
 
 type FeedProgress struct {
-	URL          string `json:"url"`
-	FetchedUntil int64  `json:"last_fetch_time"` // Unix timestamp
+	URL         string       `json:"url"`
+	FetchedUrls *hashset.Set `json:"fetchedUrls"`
 }
 
 func main() {
@@ -104,7 +106,7 @@ func readRecordFile(url string, recordDirPath string) (*FeedProgress, error) {
 }
 
 func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, continueFetch bool, timeoutSeconds int) {
-    defer close(results)
+	defer close(results)
 	fp := gofeed.NewParser()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
 	defer cancel()
@@ -115,13 +117,8 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 	}
 	// FetchedUntil is the largest published timestamp of all items
 	record := FeedProgress{
-		URL:          url,
-		FetchedUntil: 0,
-	}
-	for _, item := range feed.Items {
-		if item.PublishedParsed.Unix() > record.FetchedUntil {
-			record.FetchedUntil = item.PublishedParsed.Unix()
-		}
+		URL:         url,
+		FetchedUrls: hashset.New(),
 	}
 	// record file path is sha256 of url
 	fileName := sha256.Sum256([]byte(url))
@@ -133,24 +130,24 @@ func fetchFeed(url string, results chan *gofeed.Item, recordDirPath string, cont
 		"items": len(feed.Items),
 	}).Infof("fetched %s", url)
 
-	lastTimeStamp := int64(0)
 	if continueFetch {
 		// If continue fetching, read record file
 		recordFile, err := readRecordFile(url, recordDirPath)
 		if err != nil {
 			log.Warnf("error reading record file %s: %s, continue fetching from scratch", recordFilePath, err)
 		} else {
-			log.Infof("continue fetching %s from %s", url, time.Unix(recordFile.FetchedUntil, 0))
-			lastTimeStamp = recordFile.FetchedUntil
+			log.Infof("continue fetching %s", url)
+			record = *recordFile
 		}
 	}
 
 	for _, item := range feed.Items {
 		// If continue fetching, skip items that are fetched before
-		if continueFetch && item.PublishedParsed.Unix() <= lastTimeStamp {
+		if continueFetch && record.FetchedUrls.Contains(item.Link) {
 			continue
 		}
 		results <- item
+		record.FetchedUrls.Add(item.Link)
 	}
 
 	if recordDirPath != "" {

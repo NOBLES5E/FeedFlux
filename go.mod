@@ -3,6 +3,7 @@ module github.com/NOBLES5E/FeedFlux
 go 1.20
 
 require (
+	github.com/emirpasic/gods v1.18.1
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli/v2 v2.25.7
